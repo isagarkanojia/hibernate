@@ -55,7 +55,66 @@ public class JDBCPreparedStatement {
         return customers;
     }
 
+    /**
+     * Get customer by id using PreparedStatement
+     * SAFE FROM SQL INJECTION - parameters are properly bound
+     */
+    public Optional<Customer> getCustomerById(Long id) {
+        String sql = "SELECT id, name, pan, dob, risk_score FROM customer WHERE id = ?";
 
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setLong(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    Customer customer = extractCustomerFromResultSet(resultSet);
+                    logger.info("Found customer with id {}: {}", id, customer);
+                    return Optional.of(customer);
+                } else {
+                    logger.info("No customer found with id {}", id);
+                    return Optional.empty();
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching customer with id " + id, e);
+        }
+    }
+
+    /**
+     * Save customer using PreparedStatement
+     * SAFE FROM SQL INJECTION - parameters are properly bound
+     */
+    public Customer saveCustomer(Customer customer) {
+        String sql = "INSERT INTO customer (name, pan, dob, risk_score) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setString(1, customer.getName());
+            preparedStatement.setString(2, customer.getPan());
+            preparedStatement.setDate(3, new java.sql.Date(customer.getDob().getTime()));
+            preparedStatement.setInt(4, customer.getRiskScore());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        customer.setId(generatedKeys.getLong(1));
+                        logger.info("Saved customer with generated id {}: {}", customer.getId(), customer);
+                    }
+                }
+            }
+
+            return customer;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error saving customer: " + customer, e);
+        }
+    }
 
     /**
      * Helper method to extract Customer object from ResultSet
