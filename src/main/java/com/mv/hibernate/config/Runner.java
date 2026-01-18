@@ -1,6 +1,7 @@
 package com.mv.hibernate.config;
 
 import com.mv.hibernate.model.Customer;
+import com.mv.hibernate.service.HibernateCriteriaExample;
 import com.mv.hibernate.service.HibernateExample;
 import com.mv.hibernate.service.JDBCExample;
 import com.mv.hibernate.service.JDBCPreparedStatement;
@@ -30,6 +31,9 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private SpringDataJPAExample springDataJPAExample;
 
+    @Autowired
+    private HibernateCriteriaExample hibernateCriteriaExample;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -47,6 +51,9 @@ public class Runner implements CommandLineRunner {
 
         // Demonstrate Spring Data JPA operations (highest level abstraction)
         springDataJPAExample.demonstrateSpringDataJPAOperations();
+
+        // Demonstrate Hibernate Criteria API operations (programmatic query building)
+        hibernateCriteriaExample.demonstrateHibernateCriteriaOperations();
 
     }
 }
