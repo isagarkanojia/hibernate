@@ -1,6 +1,6 @@
 package com.mv.hibernate.service;
 
-import com.mv.hibernate.model.User;
+import com.mv.hibernate.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JDBCExample {
@@ -25,39 +23,43 @@ public class JDBCExample {
     private  DataSource dataSource;
 
     /**
-     * Get users with age greater than 30 using regular Statement
-     * NOTE: This approach is vulnerable to SQL injection if the age parameter comes from user input
+     * Get customers with risk score greater than 710 using regular Statement
+     * NOTE: This approach is vulnerable to SQL injection if parameters come from user input
      */
-    public List<User> getUsersOlderThan30() {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT id, name, email, age FROM users WHERE age > 30";
+    public List<Customer> getCustomersWithHighRiskScore() {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT id, name, pan, dob, risk_score FROM customer WHERE risk_score > 710";
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
-                User user = extractUserFromResultSet(resultSet);
-                users.add(user);
+                Customer customer = extractCustomerFromResultSet(resultSet);
+                customers.add(customer);
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching users older than 30", e);
+            throw new RuntimeException("Error fetching customers with high risk score", e);
         }
 
-        logger.info("Returning {} users older than 30: {}", users.size(), users);
-        return users;
+        logger.info("Found {} customers with risk score > 710:", customers.size());
+        for (Customer customer : customers) {
+            logger.info("Customer: {}", customer);
+        }
+        return customers;
     }
 
     /**
-     * Helper method to extract User object from ResultSet
+     * Helper method to extract Customer object from ResultSet
      */
-    private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
-        user.setEmail(resultSet.getString("email"));
-        user.setAge(resultSet.getInt("age"));
-        return user;
+    private Customer extractCustomerFromResultSet(ResultSet resultSet) throws SQLException {
+        Customer customer = new Customer();
+        customer.setId(resultSet.getLong("id"));
+        customer.setName(resultSet.getString("name"));
+        customer.setPan(resultSet.getString("pan"));
+        customer.setDob(resultSet.getDate("dob"));
+        customer.setRiskScore(resultSet.getInt("risk_score"));
+        return customer;
     }
 }

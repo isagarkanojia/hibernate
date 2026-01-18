@@ -1,6 +1,6 @@
 package com.mv.hibernate.service;
 
-import com.mv.hibernate.model.User;
+import com.mv.hibernate.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,42 +25,48 @@ public class JDBCPreparedStatement {
     private DataSource dataSource;
 
     /**
-     * Get users with age greater than specified value using PreparedStatement
+     * Get customers with risk score greater than specified value using PreparedStatement
      * SAFE FROM SQL INJECTION - parameters are properly bound
      */
-    public List<User> getUsersOlderThan(int age) {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT id, name, email, age FROM users WHERE age > ?";
+    public List<Customer> getCustomersWithRiskScoreGreaterThan(int riskScore) {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT id, name, pan, dob, risk_score FROM customer WHERE risk_score > ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, age);
+            preparedStatement.setInt(1, riskScore);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    User user = extractUserFromResultSet(resultSet);
-                    users.add(user);
+                    Customer customer = extractCustomerFromResultSet(resultSet);
+                    customers.add(customer);
                 }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching users older than " + age, e);
+            throw new RuntimeException("Error fetching customers with risk score > " + riskScore, e);
         }
 
-        logger.info("Returning {} users older than {}: {}", users.size(), age, users);
-        return users;
+        logger.info("Found {} customers with risk score > {}:", customers.size(), riskScore);
+        for (Customer customer : customers) {
+            logger.info("Customer: {}", customer);
+        }
+        return customers;
     }
 
+
+
     /**
-     * Helper method to extract User object from ResultSet
+     * Helper method to extract Customer object from ResultSet
      */
-    private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
-        user.setEmail(resultSet.getString("email"));
-        user.setAge(resultSet.getInt("age"));
-        return user;
+    private Customer extractCustomerFromResultSet(ResultSet resultSet) throws SQLException {
+        Customer customer = new Customer();
+        customer.setId(resultSet.getLong("id"));
+        customer.setName(resultSet.getString("name"));
+        customer.setPan(resultSet.getString("pan"));
+        customer.setDob(resultSet.getDate("dob"));
+        customer.setRiskScore(resultSet.getInt("risk_score"));
+        return customer;
     }
 }

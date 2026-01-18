@@ -1,6 +1,6 @@
 package com.mv.hibernate.config;
 
-import com.mv.hibernate.model.User;
+import com.mv.hibernate.model.Customer;
 import com.mv.hibernate.service.JDBCExample;
 import com.mv.hibernate.service.JDBCPreparedStatement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        // Demonstrate JDBC Example with regular Statement (vulnerable to SQL injection)
+        List<Customer> highRiskCustomersExample = jdbcExample.getCustomersWithHighRiskScore();
 
-        List<User> olderUsersExample = jdbcExample.getUsersOlderThan30();
-
-        List<User> olderUsersPrepared = jdbcPreparedStatement.getUsersOlderThan(30);
-
+        // Demonstrate JDBC PreparedStatement (safe from SQL injection)
+        List<Customer> highRiskCustomersPrepared = jdbcPreparedStatement.getCustomersWithRiskScoreGreaterThan(710);
 
     }
 }
