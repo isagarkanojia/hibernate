@@ -1,12 +1,26 @@
 package com.mv.hibernate.model;
 
+import jakarta.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "customer")
 public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Column(name = "pan", nullable = false, length = 20, unique = true)
     private String pan;
+
+    @Column(name = "dob", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dob;
+
+    @Column(name = "risk_score", nullable = false)
     private Integer riskScore;
 
     public Customer() {
