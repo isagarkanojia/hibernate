@@ -5,6 +5,7 @@ import com.mv.hibernate.service.HibernateExample;
 import com.mv.hibernate.service.JDBCExample;
 import com.mv.hibernate.service.JDBCPreparedStatement;
 import com.mv.hibernate.service.JPAExample;
+import com.mv.hibernate.service.SpringDataJPAExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private JPAExample jpaExample;
 
+    @Autowired
+    private SpringDataJPAExample springDataJPAExample;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -40,6 +44,9 @@ public class Runner implements CommandLineRunner {
 
         // Demonstrate Pure JPA operations (save and get by id)
         jpaExample.demonstrateJPAOperations();
+
+        // Demonstrate Spring Data JPA operations (highest level abstraction)
+        springDataJPAExample.demonstrateSpringDataJPAOperations();
 
     }
 }
