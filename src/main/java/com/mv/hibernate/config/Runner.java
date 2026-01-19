@@ -40,8 +40,9 @@ public class Runner implements CommandLineRunner {
         // N+1 Problem Demonstration
 
         // Show the problem
-        nPlusOneProblemDemo.demonstrateNPlusOneProblem();
+        //nPlusOneProblemDemo.demonstrateNPlusOneProblem();
 
+        nPlusOneProblemDemo.demonstrateSolutionWithJoinFetch();
 
     }
 }
