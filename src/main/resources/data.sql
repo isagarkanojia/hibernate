@@ -71,7 +71,10 @@ INSERT INTO loan_application (customer_id, product_type, requested_amount, tenur
 (22, 'PERSONAL_LOAN', 380000.00, 36, 'APPROVED', CURRENT_TIMESTAMP),
 (23, 'HOME_LOAN', 2800000.00, 228, 'PENDING', CURRENT_TIMESTAMP),
 (24, 'PERSONAL_LOAN', 420000.00, 48, 'APPROVED', CURRENT_TIMESTAMP),
-(25, 'EDUCATION_LOAN', 700000.00, 66, 'APPROVED', CURRENT_TIMESTAMP);
+(25, 'EDUCATION_LOAN', 700000.00, 66, 'APPROVED', CURRENT_TIMESTAMP),
+-- Additional loan applications for Customer 1 (Rohit Sharma) to demonstrate One-to-Many
+(1, 'BUSINESS_LOAN', 750000.00, 60, 'APPROVED', CURRENT_TIMESTAMP),
+(1, 'HOME_LOAN', 3500000.00, 240, 'PENDING', CURRENT_TIMESTAMP);
 
 -- Loans (20 active loans from approved applications)
 INSERT INTO loan (loan_application_id, approved_amount, interest_rate, status) VALUES

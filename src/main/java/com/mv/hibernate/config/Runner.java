@@ -20,10 +20,9 @@ public class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-
-//        jpaExample.getCustomerByPanWithLoanApplications("HIJKL0123O");
-
-        jdbcExample.getCustomerByPanWithLoanApplications("HIJKL0123O");
+        // Customer 1 (Rohit Sharma) - Now has 3 loan applications!
+        jpaExample.getCustomerByPanWithLoanApplications("ABCDE1234F");
+        jdbcExample.getCustomerByPanWithLoanApplications("ABCDE1234F");
 
     }
 }
