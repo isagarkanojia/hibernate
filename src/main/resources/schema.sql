@@ -69,3 +69,23 @@ CREATE TABLE audit_log (
     new_value TEXT,
     changed_at TIMESTAMP
 );
+
+-- Product table for Many-to-Many relationship
+CREATE TABLE product (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(50),
+    description TEXT,
+    base_charges DECIMAL(10,2)
+);
+
+-- Junction table for Many-to-Many relationship (Customer <-> Product)
+CREATE TABLE customer_product (
+    customer_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    subscribed_date DATE,
+    status VARCHAR(30),
+    PRIMARY KEY (customer_id, product_id),
+    CONSTRAINT fk_cp_customer FOREIGN KEY (customer_id) REFERENCES customer(id),
+    CONSTRAINT fk_cp_product FOREIGN KEY (product_id) REFERENCES product(id)
+);

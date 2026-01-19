@@ -261,3 +261,33 @@ INSERT INTO audit_log (entity_type, entity_id, old_value, new_value, changed_at)
 ('LOAN_STATUS', 12, 'ACTIVE', 'ACTIVE', CURRENT_TIMESTAMP),
 ('CUSTOMER_PAN', 15, 'OLD_PAN', 'NEW_PAN', CURRENT_TIMESTAMP),
 ('LOAN_TENURE', 7, '60', '72', CURRENT_TIMESTAMP);
+
+-- Products (for Many-to-Many demonstration)
+INSERT INTO product (name, type, description, base_charges) VALUES
+('Premium Savings Account', 'SAVINGS_ACCOUNT', 'High interest savings account', 0.00),
+('Titanium Credit Card', 'CREDIT_CARD', 'Premium credit card with rewards', 999.00),
+('Home Insurance', 'INSURANCE', 'Comprehensive property insurance', 5000.00),
+('Personal Loan Insurance', 'INSURANCE', 'Loan protection insurance', 2000.00),
+('Gold Credit Card', 'CREDIT_CARD', 'Standard credit card', 499.00),
+('Fixed Deposit', 'INVESTMENT', 'Fixed deposit scheme', 0.00),
+('Mutual Fund', 'INVESTMENT', 'Equity mutual fund', 0.00);
+
+-- Customer-Product relationships (Many-to-Many)
+-- Customer 1 (Rohit Sharma) has 4 products
+INSERT INTO customer_product (customer_id, product_id, subscribed_date, status) VALUES
+(1, 1, '2020-01-15', 'ACTIVE'),
+(1, 2, '2021-06-20', 'ACTIVE'),
+(1, 3, '2022-03-10', 'ACTIVE'),
+(1, 6, '2023-01-05', 'ACTIVE');
+
+-- Customer 3 (Vikram Singh) has 3 products (some overlap with Customer 1)
+INSERT INTO customer_product (customer_id, product_id, subscribed_date, status) VALUES
+(3, 1, '2019-05-10', 'ACTIVE'),
+(3, 5, '2021-11-15', 'ACTIVE'),
+(3, 7, '2022-08-20', 'ACTIVE');
+
+-- Customer 6 (Sneha Reddy) has 3 products
+INSERT INTO customer_product (customer_id, product_id, subscribed_date, status) VALUES
+(6, 2, '2020-08-20', 'ACTIVE'),
+(6, 4, '2021-02-14', 'ACTIVE'),
+(6, 5, '2022-01-01', 'ACTIVE');
