@@ -4,6 +4,7 @@ import com.mv.hibernate.FirstLevelCache.DifferentTransactionsCacheExample;
 import com.mv.hibernate.FirstLevelCache.FirstLevelCacheExample;
 import com.mv.hibernate.FirstLevelCache.SaveAndCacheExample;
 import com.mv.hibernate.FirstLevelCache.UpdatesInCacheExample;
+import com.mv.hibernate.InefficientQuery.InefficientSQLExample;
 import com.mv.hibernate.ManyToMany.ManyToManyJPAExample;
 import com.mv.hibernate.NPlusOne.NPlusOneProblemDemo;
 import com.mv.hibernate.SecondLevelCache.SecondLevelCacheExample;
@@ -35,14 +36,17 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private NPlusOneProblemDemo nPlusOneProblemDemo;
 
+    @Autowired
+    private InefficientSQLExample inefficientSQLExample;
+
     @Override
     public void run(String... args) {
-        // N+1 Problem Demonstration
+        // Inefficient SQL Demonstration
+        inefficientSQLExample.demonstrateInefficientSQL();
 
-        // Show the problem
-        //nPlusOneProblemDemo.demonstrateNPlusOneProblem();
-
-        nPlusOneProblemDemo.demonstrateSolutionWithJoinFetch();
+        // N+1 Problem Demonstration (commented out)
+        // nPlusOneProblemDemo.demonstrateNPlusOneProblem();
+        // nPlusOneProblemDemo.demonstrateSolutionWithJoinFetch();
 
     }
 }
