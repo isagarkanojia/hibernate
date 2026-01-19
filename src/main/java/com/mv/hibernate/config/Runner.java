@@ -5,6 +5,7 @@ import com.mv.hibernate.FirstLevelCache.FirstLevelCacheExample;
 import com.mv.hibernate.FirstLevelCache.SaveAndCacheExample;
 import com.mv.hibernate.FirstLevelCache.UpdatesInCacheExample;
 import com.mv.hibernate.ManyToMany.ManyToManyJPAExample;
+import com.mv.hibernate.NPlusOne.NPlusOneProblemDemo;
 import com.mv.hibernate.SecondLevelCache.SecondLevelCacheExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,10 +32,16 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private SecondLevelCacheExample secondLevelCacheExample;
 
+    @Autowired
+    private NPlusOneProblemDemo nPlusOneProblemDemo;
+
     @Override
     public void run(String... args) {
-        // Second Level Cache Example
-        secondLevelCacheExample.demonstrate();
+        // N+1 Problem Demonstration
+
+        // Show the problem
+        nPlusOneProblemDemo.demonstrateNPlusOneProblem();
+
 
     }
 }

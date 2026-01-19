@@ -37,10 +37,10 @@ public class CustomerWithLoans {
      * - @OneToMany: Defines the one-to-many relationship
      * - mappedBy: Not used here because we're using @JoinColumn
      * - @JoinColumn: Specifies the foreign key column in the LoanApplication table
-     * - FetchType.EAGER: Loads all loan applications immediately with customer (for teaching simplicity)
-     * - FetchType.LAZY: Would load only when accessed (requires active transaction)
+     * - FetchType.LAZY: Loads only when accessed (allows demonstration of N+1 problem)
+     * - FetchType.EAGER: Would load immediately (prevents N+1 but uses memory)
      */
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id") // This is the foreign key column in loan_application table
     private List<LoanApplication> loanApplications = new ArrayList<>();
     
