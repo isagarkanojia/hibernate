@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+        xmlns='http://www.ehcache.org/v3'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <service>
+        <jsr107:defaults enable-management="true" enable-statistics="true"/>
+    </service>
+
+    <!-- Cache for Customer entity -->
+    <cache alias="com.mv.hibernate.model.Customer">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.mv.hibernate.model.Customer</value-type>
+        <expiry>
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+        </resources>
+    </cache>
+
+    <!-- Default cache for query results -->
+    <cache alias="default-query-results-region">
+        <expiry>
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">500</heap>
+        </resources>
+    </cache>
+
+    <!-- Default cache for update timestamps -->
+    <cache alias="default-update-timestamps-region">
+        <expiry>
+            <none/>
+        </expiry>
+        <resources>
+            <heap unit="entries">5000</heap>
+        </resources>
+    </cache>
+
+</config>
