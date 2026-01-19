@@ -1,31 +1,24 @@
 package com.mv.hibernate.config;
 
-import com.mv.hibernate.model.Customer;
-import com.mv.hibernate.service.JDBCExample;
-import com.mv.hibernate.service.JDBCPreparedStatement;
+import com.mv.hibernate.OneToMany.OneToManyJDBCExample;
+import com.mv.hibernate.OneToMany.OneToManyJPAExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
-    private JDBCExample jdbcExample;
+    private OneToManyJPAExample jpaExample;
 
     @Autowired
-    private JDBCPreparedStatement jdbcPreparedStatement;
+    private OneToManyJDBCExample jdbcExample;
 
     @Override
     public void run(String... args) throws Exception {
 
-        // Demonstrate JDBC Example with regular Statement (vulnerable to SQL injection)
-        List<Customer> highRiskCustomersExample = jdbcExample.getCustomersWithHighRiskScore();
-
-        // Demonstrate JDBC PreparedStatement (safe from SQL injection)
-        List<Customer> highRiskCustomersPrepared = jdbcPreparedStatement.getCustomersWithRiskScoreGreaterThan(710);
+        jpaExample.getCustomerByPanWithLoanApplications("HIJKL0123O");
 
     }
 }

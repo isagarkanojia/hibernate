@@ -1,6 +1,8 @@
 package com.mv.hibernate.config;
 
 import com.mv.hibernate.model.Customer;
+import com.mv.hibernate.model.CustomerWithLoans;
+import com.mv.hibernate.model.LoanApplication;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -32,6 +34,8 @@ public class HibernateConfig {
 
         // Add annotated classes
         configuration.addAnnotatedClass(Customer.class);
+        configuration.addAnnotatedClass(CustomerWithLoans.class);
+        configuration.addAnnotatedClass(LoanApplication.class);
 
         return configuration.buildSessionFactory();
     }
