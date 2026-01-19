@@ -1,59 +1,29 @@
 package com.mv.hibernate.config;
 
-import com.mv.hibernate.model.Customer;
-import com.mv.hibernate.service.HibernateCriteriaExample;
-import com.mv.hibernate.service.HibernateExample;
-import com.mv.hibernate.service.JDBCExample;
-import com.mv.hibernate.service.JDBCPreparedStatement;
-import com.mv.hibernate.service.JPAExample;
-import com.mv.hibernate.service.SpringDataJPAExample;
+import com.mv.hibernate.OneToMany.OneToManyJDBCExample;
+import com.mv.hibernate.OneToMany.OneToManyJPAExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class Runner implements CommandLineRunner {
 
-    @Autowired
-    private JDBCExample jdbcExample;
 
     @Autowired
-    private JDBCPreparedStatement jdbcPreparedStatement;
+    private OneToManyJPAExample jpaExample;
 
     @Autowired
-    private HibernateExample hibernateExample;
+    private OneToManyJDBCExample jdbcExample;
 
-    @Autowired
-    private JPAExample jpaExample;
-
-    @Autowired
-    private SpringDataJPAExample springDataJPAExample;
-
-    @Autowired
-    private HibernateCriteriaExample hibernateCriteriaExample;
 
     @Override
     public void run(String... args) throws Exception {
 
-        // Demonstrate JDBC Example with regular Statement (vulnerable to SQL injection)
-        List<Customer> highRiskCustomersExample = jdbcExample.getCustomersWithHighRiskScore();
 
-        // Demonstrate JDBC PreparedStatement (safe from SQL injection)
-        List<Customer> highRiskCustomersPrepared = jdbcPreparedStatement.getCustomersWithRiskScoreGreaterThan(710);
+//        jpaExample.getCustomerByPanWithLoanApplications("HIJKL0123O");
 
-        // Demonstrate Pure Hibernate operations (save and get by id)
-        hibernateExample.demonstrateHibernateOperations();
-
-        // Demonstrate Pure JPA operations (save and get by id)
-        jpaExample.demonstrateJPAOperations();
-
-        // Demonstrate Spring Data JPA operations (highest level abstraction)
-        springDataJPAExample.demonstrateSpringDataJPAOperations();
-
-        // Demonstrate Hibernate Criteria API operations (programmatic query building)
-        hibernateCriteriaExample.demonstrateHibernateCriteriaOperations();
+        jdbcExample.getCustomerByPanWithLoanApplications("HIJKL0123O");
 
     }
 }

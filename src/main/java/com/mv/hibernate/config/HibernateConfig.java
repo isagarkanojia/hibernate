@@ -27,8 +27,9 @@ public class HibernateConfig {
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 
         // Hibernate properties
-        configuration.setProperty("hibernate.show_sql", "false");
-        configuration.setProperty("hibernate.format_sql", "false");
+        configuration.setProperty("hibernate.show_sql", "true");
+        configuration.setProperty("hibernate.format_sql", "true");
+        configuration.setProperty("hibernate.highlight_sql", "true");
         configuration.setProperty("hibernate.hbm2ddl.auto", "validate"); // Use validate since we have schema.sql
         configuration.setProperty("hibernate.current_session_context_class", "thread");
 
