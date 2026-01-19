@@ -116,7 +116,7 @@ public class SpringDataJPAExample {
         List<Customer> highRiskCustomers = getCustomersWithHighRiskScore();
 
         // Count customers in risk range
-        long countInRange = countCustomersInRiskRange(700, 800);
+//        long countInRange = countCustomersInRiskRange(700, 800);
 
         // Verify the data
         if (retrievedCustomer != null &&

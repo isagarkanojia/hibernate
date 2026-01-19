@@ -37,23 +37,23 @@ public class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // Demonstrate JDBC Example with regular Statement (vulnerable to SQL injection)
-        List<Customer> highRiskCustomersExample = jdbcExample.getCustomersWithHighRiskScore();
-
-        // Demonstrate JDBC PreparedStatement (safe from SQL injection)
-        List<Customer> highRiskCustomersPrepared = jdbcPreparedStatement.getCustomersWithRiskScoreGreaterThan(710);
+//        // Demonstrate JDBC Example with regular Statement (vulnerable to SQL injection)
+//        List<Customer> highRiskCustomersExample = jdbcExample.getCustomersWithHighRiskScore();
+//
+//        // Demonstrate JDBC PreparedStatement (safe from SQL injection)
+//        List<Customer> highRiskCustomersPrepared = jdbcPreparedStatement.getCustomersWithRiskScoreGreaterThan(710);
 
         // Demonstrate Pure Hibernate operations (save and get by id)
-        hibernateExample.demonstrateHibernateOperations();
+//        hibernateExample.demonstrateHibernateOperations();
 
         // Demonstrate Pure JPA operations (save and get by id)
-        jpaExample.demonstrateJPAOperations();
+//        jpaExample.demonstrateJPAOperations();
 
         // Demonstrate Spring Data JPA operations (highest level abstraction)
         springDataJPAExample.demonstrateSpringDataJPAOperations();
 
         // Demonstrate Hibernate Criteria API operations (programmatic query building)
-        hibernateCriteriaExample.demonstrateHibernateCriteriaOperations();
+//        hibernateCriteriaExample.demonstrateHibernateCriteriaOperations();
 
     }
 }
