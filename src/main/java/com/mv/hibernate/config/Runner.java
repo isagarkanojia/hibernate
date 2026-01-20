@@ -31,10 +31,10 @@ public class Runner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 //        // Example 1: Basic First Level Cache
-//        firstLevelCacheExample.demonstrateFirstLevelCache();
+        firstLevelCacheExample.demonstrateFirstLevelCache();
 
         // Example 2: Different Transactions = Different Cache
-        differentTransactionsExample.demonstrate();
+//        differentTransactionsExample.demonstrate();
 
 //        // Example 3: Updates in Cache
 //        try {

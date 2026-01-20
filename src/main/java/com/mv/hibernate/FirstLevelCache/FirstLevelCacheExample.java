@@ -17,7 +17,7 @@ public class FirstLevelCacheExample {
      * Within the same transaction, fetching the same entity multiple times
      * will only hit the database once.
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public void demonstrateFirstLevelCache() {
         System.out.println("\n=== First Level Cache Demo ===\n");
         
