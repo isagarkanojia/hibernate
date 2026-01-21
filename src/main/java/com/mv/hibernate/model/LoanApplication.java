@@ -2,7 +2,7 @@ package com.mv.hibernate.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * LoanApplication Entity - represents a loan application submitted by a customer
@@ -32,15 +32,14 @@ public class LoanApplication {
     private String status;
     
     @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
     
     // Constructors
     public LoanApplication() {
     }
     
     public LoanApplication(Long customerId, String productType, BigDecimal requestedAmount, 
-                          Integer tenureMonths, String status, Date createdAt) {
+                          Integer tenureMonths, String status, LocalDateTime createdAt) {
         this.customerId = customerId;
         this.productType = productType;
         this.requestedAmount = requestedAmount;
@@ -98,11 +97,11 @@ public class LoanApplication {
         this.status = status;
     }
     
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
     
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
     

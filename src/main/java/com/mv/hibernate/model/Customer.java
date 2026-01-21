@@ -3,7 +3,7 @@ package com.mv.hibernate.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "customer")
@@ -21,8 +21,7 @@ public class Customer {
     private String pan;
 
     @Column(name = "dob", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dob;
+    private LocalDate dob;
 
     @Column(name = "risk_score", nullable = false)
     private Integer riskScore;
@@ -30,7 +29,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String name, String pan, Date dob, Integer riskScore) {
+    public Customer(Long id, String name, String pan, LocalDate dob, Integer riskScore) {
         this.id = id;
         this.name = name;
         this.pan = pan;
@@ -62,11 +61,11 @@ public class Customer {
         this.pan = pan;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

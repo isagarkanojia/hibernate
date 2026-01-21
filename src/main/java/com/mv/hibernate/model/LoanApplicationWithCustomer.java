@@ -2,7 +2,7 @@ package com.mv.hibernate.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * LoanApplicationWithCustomer Entity - demonstrates Many-to-One relationship
@@ -33,8 +33,7 @@ public class LoanApplicationWithCustomer {
     private String status;
     
     @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
     
     /**
      * MANY-TO-ONE RELATIONSHIP:
@@ -53,7 +52,7 @@ public class LoanApplicationWithCustomer {
     }
     
     public LoanApplicationWithCustomer(Long customerId, String productType, BigDecimal requestedAmount, 
-                                      Integer tenureMonths, String status, Date createdAt) {
+                                      Integer tenureMonths, String status, LocalDateTime createdAt) {
         this.customerId = customerId;
         this.productType = productType;
         this.requestedAmount = requestedAmount;
@@ -111,11 +110,11 @@ public class LoanApplicationWithCustomer {
         this.status = status;
     }
     
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
     
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
     

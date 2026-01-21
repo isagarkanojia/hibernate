@@ -1,8 +1,8 @@
 package com.mv.hibernate.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +25,7 @@ public class CustomerWithProducts {
     private String pan;
     
     @Column(name = "dob", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dob;
+    private LocalDate dob;
     
     @Column(name = "risk_score", nullable = false)
     private Integer riskScore;
@@ -53,7 +52,7 @@ public class CustomerWithProducts {
     public CustomerWithProducts() {
     }
     
-    public CustomerWithProducts(String name, String pan, Date dob, Integer riskScore) {
+    public CustomerWithProducts(String name, String pan, LocalDate dob, Integer riskScore) {
         this.name = name;
         this.pan = pan;
         this.dob = dob;
@@ -85,11 +84,11 @@ public class CustomerWithProducts {
         this.pan = pan;
     }
     
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
     
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
     
