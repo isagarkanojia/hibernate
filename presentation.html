@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering JDBC, JPA & Hibernate - Sagar Kanojia</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css" id="theme">
+    
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css">
+    
+    <style>
+        :root {
+            --primary-color: #5ED4F4;
+            --secondary-color: #64B5F6;
+            --accent-color: #FFA726;
+            --success-color: #66BB6A;
+            --warning-color: #FFB74D;
+            --error-color: #EF5350;
+            --info-color: #42A5F5;
+            --purple-color: #AB47BC;
+            --teal-color: #26A69A;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 32px;
+            color: #E0E0E0;
+        }
+
+        .reveal .slides {
+            text-align: center;
+        }
+
+        .reveal .slides section {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .reveal p {
+            color: #E0E0E0;
+        }
+
+        .reveal li {
+            color: #E0E0E0;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+            font-weight: 700;
+        }
+
+        .reveal h1 {
+            color: #5ED4F4;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 2.5em;
+        }
+
+        .reveal h2 {
+            color: #64B5F6;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .reveal h3 {
+            color: #FFA726;
+            font-size: 1.2em;
+        }
+
+        .reveal h4 {
+            font-size: 1em;
+            margin: 10px 0;
+            color: #E0E0E0;
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            font-size: 3em;
+            color: #5ED4F4;
+            margin-bottom: 20px;
+        }
+
+        .title-slide h3 {
+            color: #FFD95A;
+            font-style: italic;
+        }
+
+        .title-slide .author {
+            margin-top: 50px;
+            font-size: 1.5em;
+            color: #66BB6A;
+        }
+
+        /* Code blocks */
+        .reveal pre {
+            width: 95%;
+            max-height: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin: 15px auto;
+            font-size: 0.55em;
+        }
+
+        .reveal code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            padding: 2px 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .reveal pre code {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Lists */
+        .reveal ul, .reveal ol {
+            text-align: left;
+            margin-left: 1em;
+            font-size: 0.9em;
+        }
+
+        .reveal li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        /* Emojis and icons */
+        .check { color: var(--success-color); }
+        .cross { color: var(--error-color); }
+        .warning { color: var(--warning-color); }
+
+        /* Boxes */
+        .box {
+            background: rgba(100, 181, 246, 0.12);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+            font-size: 0.85em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .box.success {
+            border-left-color: var(--success-color);
+            background: rgba(102, 187, 106, 0.12);
+        }
+
+        .box.warning {
+            border-left-color: var(--warning-color);
+            background: rgba(255, 183, 77, 0.12);
+        }
+
+        .box.error {
+            border-left-color: var(--error-color);
+            background: rgba(239, 83, 80, 0.12);
+        }
+
+        .box ul {
+            margin: 5px 0;
+        }
+
+        .box li {
+            margin: 5px 0;
+        }
+
+        .box strong {
+            color: var(--primary-color);
+        }
+
+        .box.success strong {
+            color: var(--success-color);
+        }
+
+        .box.warning strong {
+            color: var(--warning-color);
+        }
+
+        .box.error strong {
+            color: var(--error-color);
+        }
+
+        /* Diagrams */
+        .diagram {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.1) 0%, rgba(102, 187, 106, 0.1) 100%);
+            border: 2px solid rgba(94, 212, 244, 0.4);
+            padding: 30px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.7em;
+            line-height: 1.4;
+            color: #66BB6A;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            max-width: 80%;
+            margin: 20px auto;
+        }
+
+        /* Architecture boxes for better diagrams */
+        .arch-box {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.9) 0%, rgba(66, 165, 245, 0.9) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 10px auto;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            max-width: 600px;
+            color: #FFFFFF;
+        }
+
+        .arch-arrow {
+            font-size: 2em;
+            color: #66BB6A;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .arch-item {
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.85) 0%, rgba(255, 167, 38, 0.85) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 0.8em;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+            color: #212121;
+            font-weight: 600;
+        }
+
+        /* Comparison tables */
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 0.8em;
+        }
+
+        table th, table td {
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 20px;
+        }
+
+        table th {
+            background: rgba(76, 175, 80, 0.3);
+            font-weight: bold;
+        }
+
+        /* Two column layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            margin: 15px auto;
+            max-width: 95%;
+        }
+
+        /* Highlight important text */
+        .highlight {
+            background: linear-gradient(120deg, var(--accent-color) 0%, var(--accent-color) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+        }
+
+        /* Footer */
+        .slide-number {
+            font-size: 0.7em;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Section dividers */
+        .section-divider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 50px;
+        }
+
+        .section-divider h1 {
+            color: #FFD95A;
+            font-size: 3.5em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+        }
+
+        .section-divider h3 {
+            color: #E0E0E0;
+        }
+
+        /* Problem/Solution styles */
+        .problem {
+            border-left: 5px solid var(--error-color);
+        }
+
+        .solution {
+            border-left: 5px solid var(--success-color);
+        }
+
+        /* Small text */
+        .small {
+            font-size: 0.65em;
+        }
+
+        .small ul {
+            margin: 5px 0;
+        }
+
+        .small li {
+            margin: 3px 0;
+            line-height: 1.3;
+        }
+
+        /* Center content */
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- SLIDE 1: Title -->
+            <section class="title-slide">
+                <h1>🚀 Mastering JDBC, JPA & Hibernate</h1>
+                <h3>From Raw SQL to Modern ORM</h3>
+                <p class="author">Presented by: <strong>Sagar Kanojia</strong></p>
+                <p style="margin-top: 50px; font-size: 0.8em;">A Deep Dive into Java Persistence • 2026</p>
+            </section>
+
+            <!-- SLIDE 2: What is JDBC? -->
+            <section>
+                <h2>What is JDBC?</h2>
+                <div class="box">
+                    <h3>JDBC (Java Database Connectivity)</h3>
+                    <ul>
+                        <li>Java API for connecting to relational databases</li>
+                        <li>Provides methods to query and update data</li>
+                        <li>Database-independent abstraction layer</li>
+                        <li>Part of Java SE (java.sql package)</li>
+                    </ul>
+                </div>
+                <div class="two-columns" style="margin-top: 30px;">
+                    <div>
+                        <strong>Key Components:</strong>
+                        <ul>
+                            <li><code>DriverManager</code></li>
+                            <li><code>Connection</code></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul style="margin-top: 28px;">
+                            <li><code>Statement/PreparedStatement</code></li>
+                            <li><code>ResultSet</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: JDBC Architecture -->
+            <section>
+                <h2>JDBC Architecture</h2>
+                <div style="font-size: 0.8em;">
+                    <div class="arch-box">
+                        Java Application
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box">
+                        JDBC API (java.sql.*)<br>
+                        <span style="font-size: 0.7em;">DriverManager | Connection | Statement | ResultSet</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box">
+                        JDBC Driver Manager
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-item">MySQL<br>Driver</div>
+                        <div class="arch-item">PostgreSQL<br>Driver</div>
+                        <div class="arch-item">Oracle<br>Driver</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box">
+                        Database Servers
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: JDBC Statement Example -->
+            <section>
+                <h2>JDBC Example - Statement <span class="cross">⚠️ Not Safe</span></h2>
+                <p>Direct SQL execution - vulnerable to SQL injection</p>
+                <pre><code class="java" data-line-numbers="1-20">// ❌ Vulnerable to SQL Injection
+public List<Customer> getCustomersWithHighRiskScore() {
+    List<Customer> customers = new ArrayList<>();
+    String sql = "SELECT * FROM customer WHERE risk_score > 710";
+
+    try (Connection conn = dataSource.getConnection();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+
+        while (rs.next()) {
+            Customer customer = new Customer();
+            customer.setId(rs.getLong("id"));
+            customer.setName(rs.getString("name"));
+            // ... manual mapping
+            customers.add(customer);
+        }
+    }
+    return customers;
+}</code></pre>
+                <div class="box error">
+                    <strong>Problems:</strong> SQL Injection • Manual Mapping • Boilerplate Code
+                </div>
+            </section>
+
+            <!-- SLIDE 5: JDBC PreparedStatement -->
+            <section>
+                <h2>JDBC Example - PreparedStatement <span class="check">✅ Safe</span></h2>
+                <pre><code class="java" data-line-numbers="1-15|6">// ✅ Safe from SQL Injection
+public List<Customer> getCustomersWithRiskScore(int riskScore) {
+    String sql = "SELECT * FROM customer WHERE risk_score > ?";
+
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, riskScore);  // Parameter binding
+        
+        try (ResultSet rs = pstmt.executeQuery()) {
+            // ... mapping
+        }
+    }
+}</code></pre>
+                <div class="two-columns small">
+                    <div class="box success">
+                        <strong>Advantages:</strong><br>
+                        ✅ SQL injection protection<br>
+                        ✅ Better performance
+                    </div>
+                    <div class="box warning">
+                        <strong>Still Problems:</strong><br>
+                        ❌ Manual mapping<br>
+                        ❌ Repetitive code
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: Problems with JDBC -->
+            <section>
+                <h2>Problems with JDBC</h2>
+                <div class="two-columns">
+                    <div class="box error">
+                        <h4>1. Boilerplate Code</h4>
+                        <ul class="small">
+                            <li>Connection management</li>
+                            <li>Resource cleanup</li>
+                            <li>Exception handling</li>
+                        </ul>
+                    </div>
+                    <div class="box error">
+                        <h4>2. Manual Mapping</h4>
+                        <ul class="small">
+                            <li>ResultSet → Object</li>
+                            <li>Type conversions</li>
+                            <li>Repetitive code</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="two-columns">
+                    <div class="box error">
+                        <h4>3. No Relationships</h4>
+                        <ul class="small">
+                            <li>Manual foreign keys</li>
+                            <li>Complex JOINs</li>
+                            <li>No lazy loading</li>
+                        </ul>
+                    </div>
+                    <div class="box error">
+                        <h4>4. No Caching</h4>
+                        <ul class="small">
+                            <li>Every query hits DB</li>
+                            <li>No optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Divider: ORM -->
+            <section class="section-divider">
+                <h1>💡 Enter ORM</h1>
+                <h3>Object-Relational Mapping</h3>
+            </section>
+
+            <!-- SLIDE 7: The Need for ORM -->
+            <section>
+                <h2>The Need for ORM</h2>
+                <div class="box success">
+                    <h3>What is ORM?</h3>
+                    <p>Maps Java objects to database tables automatically</p>
+                </div>
+                <div class="two-columns small">
+                    <div>
+                        <strong>Benefits:</strong>
+                        <ul>
+                            <li class="check">✅ 70-80% less code</li>
+                            <li class="check">✅ Automatic mapping</li>
+                            <li class="check">✅ Built-in caching</li>
+                            <li class="check">✅ Lazy loading</li>
+                            <li class="check">✅ Transaction mgmt</li>
+                            <li class="check">✅ DB independence</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Popular Java ORMs:</strong>
+                        <ul>
+                            <li>🔥 <strong>Hibernate</strong> (most popular)</li>
+                            <li>EclipseLink</li>
+                            <li>TopLink</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 8: Introduction to Hibernate -->
+            <section>
+                <h2>Introduction to Hibernate</h2>
+                <div class="box">
+                    <h3>🔥 Hibernate - The ORM Champion</h3>
+                    <ul class="small">
+                        <li>Most popular Java ORM framework</li>
+                        <li>Open-source (Red Hat)</li>
+                        <li>Implements JPA specification + extensions</li>
+                    </ul>
+                </div>
+                <div class="two-columns small">
+                    <div>
+                        <strong>Key Features:</strong>
+                        <ul>
+                            <li>Auto table creation</li>
+                            <li>HQL (Hibernate Query Language)</li>
+                            <li>Two-level caching</li>
+                            <li>Lazy loading</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul style="margin-top: 28px;">
+                            <li>Dirty checking</li>
+                            <li>Batch processing</li>
+                            <li>Database dialects</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box success" style="margin-top: 20px;">
+                    <strong>Hibernate = JPA + Extra Features</strong>
+                </div>
+            </section>
+
+            <!-- SLIDE 9: Hibernate Architecture -->
+            <section>
+                <h2>Hibernate Architecture</h2>
+                <div style="font-size: 0.75em;">
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(94, 212, 244, 0.9) 0%, rgba(66, 165, 245, 0.9) 100%);">
+                        Java Application Layer<br>
+                        <span style="font-size: 0.7em;">(Entity Classes: Customer.java)</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(100, 181, 246, 0.9) 0%, rgba(66, 165, 245, 0.9) 100%);">
+                        JPA/Hibernate API<br>
+                        <span style="font-size: 0.7em;">EntityManager | Session | Query</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(102, 187, 106, 0.9) 0%, rgba(76, 175, 80, 0.9) 100%);">
+                        Persistence Context<br>
+                        <span style="font-size: 0.7em;">(First-Level Cache - Session Scope) ⚡</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-item" style="font-size: 0.7em; background: linear-gradient(135deg, rgba(171, 71, 188, 0.8) 0%, rgba(142, 36, 170, 0.8) 100%); color: white;">Query<br>Cache</div>
+                        <div class="arch-item" style="font-size: 0.7em; background: linear-gradient(135deg, rgba(171, 71, 188, 0.8) 0%, rgba(142, 36, 170, 0.8) 100%); color: white;">Second-Level<br>Cache 🚀</div>
+                        <div class="arch-item" style="font-size: 0.7em; background: linear-gradient(135deg, rgba(38, 166, 154, 0.8) 0%, rgba(0, 150, 136, 0.8) 100%); color: white;">Transaction<br>Manager</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(255, 183, 77, 0.85) 0%, rgba(255, 167, 38, 0.85) 100%); color: #212121;">
+                        JDBC Layer
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(239, 83, 80, 0.7) 0%, rgba(229, 57, 53, 0.7) 100%);">
+                        Database 💾
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 10: Introduction to JPA -->
+            <section>
+                <h2>Introduction to JPA</h2>
+                <div class="box">
+                    <h3>Jakarta Persistence API (JPA)</h3>
+                    <p>Standard specification for ORM in Java</p>
+                </div>
+                <div class="center" style="font-size: 2em; margin: 30px 0;">
+                    <strong class="highlight">JPA = Specification</strong><br>
+                    <span style="font-size: 0.5em;">≠</span><br>
+                    <strong class="highlight">Hibernate = Implementation</strong>
+                </div>
+                <div class="two-columns small">
+                    <div>
+                        <strong>Implementations:</strong>
+                        <ul>
+                            <li>Hibernate 🔥</li>
+                            <li>EclipseLink</li>
+                            <li>OpenJPA</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Key Interfaces:</strong>
+                        <ul>
+                            <li>EntityManagerFactory</li>
+                            <li>EntityManager</li>
+                            <li>EntityTransaction</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 11: JPA vs Hibernate -->
+            <section>
+                <h2>JPA vs Hibernate</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>JPA</th>
+                            <th>Hibernate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Specification</td>
+                            <td>Implementation</td>
+                        </tr>
+                        <tr>
+                            <td>jakarta.persistence.*</td>
+                            <td>org.hibernate.*</td>
+                        </tr>
+                        <tr>
+                            <td>Standard annotations</td>
+                            <td>Extra annotations</td>
+                        </tr>
+                        <tr>
+                            <td>EntityManager</td>
+                            <td>Session (native API)</td>
+                        </tr>
+                        <tr>
+                            <td>JPQL queries</td>
+                            <td>HQL (superset)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="box success small" style="margin-top: 20px;">
+                    <strong>Hibernate-Specific:</strong> @Formula, @Cache, @BatchSize, @Filter, Statistics API
+                </div>
+            </section>
+
+            <!-- SLIDE 12: Spring Data JPA -->
+            <section>
+                <h2>🍃 Spring Data JPA</h2>
+                <div class="box success">
+                    <h3>The Ultimate Abstraction</h3>
+                    <p>Spring abstraction over JPA - eliminates even more boilerplate</p>
+                </div>
+                <pre><code class="java">public interface CustomerRepository 
+       extends JpaRepository&lt;Customer, Long&gt; {
+    
+    // Method name → Query generation! 🪄
+    List&lt;Customer&gt; findByRiskScoreGreaterThan(int score);
+    Customer findByPan(String pan);
+    long countByRiskScoreBetween(int min, int max);
+}</code></pre>
+                <div class="box success small">
+                    <strong>Magic:</strong> No implementation needed - Spring generates queries from method names!
+                </div>
+            </section>
+
+            <!-- SLIDE 13: Evolution -->
+            <section>
+                <h2>Evolution: JDBC → JPA → Spring Data JPA</h2>
+                <h4>Task: Find Customer by ID</h4>
+                <div style="text-align: left; font-size: 0.7em;">
+                    <div class="box error">
+                        <strong>JDBC (15+ lines):</strong>
+                        <pre style="margin: 10px 0;"><code>Connection, PreparedStatement, ResultSet, manual mapping...</code></pre>
+                    </div>
+                    <div class="box warning">
+                        <strong>JPA (5 lines):</strong>
+                        <pre style="margin: 10px 0;"><code>EntityManager em = emf.createEntityManager();
+Customer customer = em.find(Customer.class, id);
+em.close();</code></pre>
+                    </div>
+                    <div class="box success">
+                        <strong>Spring Data JPA (1 line!):</strong>
+                        <pre style="margin: 10px 0;"><code>Customer customer = customerRepository.findById(id).orElse(null);</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 14: JPA Entity Annotations -->
+            <section>
+                <h2>JPA Entity Annotations</h2>
+                <pre><code class="java" data-line-numbers="1-3|5-7|9-14">@Entity                              // JPA entity
+@Table(name = "customer")            // Table mapping
+@Cacheable                           // 2nd level cache
+
+@Id                                  // Primary key
+@GeneratedValue(strategy = IDENTITY) // Auto-increment
+private Long id;
+
+@Column(name = "name",               // Column mapping
+        nullable = false,            // NOT NULL
+        length = 100)                // VARCHAR(100)
+private String name;
+
+@Temporal(TemporalType.DATE)         // Date precision
+private Date dob;</code></pre>
+            </section>
+
+            <!-- Section Divider: Relationships -->
+            <section class="section-divider">
+                <h1>🔗 Entity Relationships</h1>
+                <h3>One-to-Many • Many-to-One • Many-to-Many</h3>
+            </section>
+
+            <!-- SLIDE 16: Relationship Mappings -->
+            <section>
+                <h2>Entity Relationship Mappings</h2>
+                <div class="two-columns small">
+                    <div class="box">
+                        <h4>1. @OneToMany (1:N)</h4>
+                        <pre><code class="java">@OneToMany
+@JoinColumn(name = "customer_id")
+List&lt;LoanApplication&gt; loans;</code></pre>
+                        <p class="small">One Customer → Many Loans</p>
+                    </div>
+                    <div class="box">
+                        <h4>2. @ManyToOne (N:1)</h4>
+                        <pre><code class="java">@ManyToOne
+@JoinColumn(name = "customer_id")
+Customer customer;</code></pre>
+                        <p class="small">Many Loans → One Customer</p>
+                    </div>
+                </div>
+                <div class="box" style="margin-top: 20px;">
+                    <h4>3. @ManyToMany (M:N)</h4>
+                    <pre><code class="java">@ManyToMany
+@JoinTable(name = "customer_products",
+  joinColumns = @JoinColumn(name = "customer_id"),
+  inverseJoinColumns = @JoinColumn(name = "product_id"))
+List&lt;Product&gt; products;</code></pre>
+                    <p class="small">Many Customers ↔ Many Products (requires join table)</p>
+                </div>
+            </section>
+
+            <!-- Section Divider: Caching -->
+            <section class="section-divider">
+                <h1>⚡ Hibernate Caching</h1>
+                <h3>Two-Level Performance Optimization</h3>
+            </section>
+
+            <!-- SLIDE 20: Caching Overview -->
+            <section>
+                <h2>Hibernate Caching Overview</h2>
+                <div style="font-size: 0.85em;">
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(102, 187, 106, 0.9) 0%, rgba(76, 175, 80, 0.9) 100%);">
+                        ⚡ First-Level Cache (L1)<br>
+                        <span style="font-size: 0.7em;">Session/Transaction • Enabled by default • Cannot disable</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(171, 71, 188, 0.9) 0%, rgba(142, 36, 170, 0.9) 100%);">
+                        🚀 Second-Level Cache (L2)<br>
+                        <span style="font-size: 0.7em;">Application-wide • Optional • Shared across sessions</span>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, rgba(239, 83, 80, 0.85) 0%, rgba(229, 57, 53, 0.85) 100%);">
+                        💾 Database
+                    </div>
+                </div>
+                <div class="box success" style="margin-top: 30px; font-size: 0.9em; padding: 12px;">
+                    <strong>💡 Why Caching?</strong><br>
+                    <div style="margin-top: 8px; display: flex; justify-content: space-around; font-size: 0.85em;">
+                        <span>✅ Reduce DB round trips</span>
+                        <span>✅ Improve performance</span>
+                        <span>✅ Lower DB load</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 21: First-Level Cache -->
+            <section>
+                <h2>⚡ First-Level Cache (L1)</h2>
+                <h4 style="font-size: 0.85em; color: #66BB6A;">Session/Transaction-Scoped Cache</h4>
+                
+                <div class="two-columns" style="margin-top: 15px;">
+                    <div>
+                        <div class="box success" style="padding: 12px; font-size: 0.75em;">
+                            <strong>✅ Characteristics:</strong>
+                            <ul style="margin: 8px 0; text-align: left;">
+                                <li>Enabled by default</li>
+                                <li>Cannot be disabled</li>
+                                <li>Transaction-scoped</li>
+                                <li>Automatic management</li>
+                                <li>Identity guarantee</li>
+                                <li>Dirty checking</li>
+                            </ul>
+                        </div>
+                        <div class="box" style="padding: 10px; font-size: 0.65em; margin-top: 10px; background: rgba(100, 181, 246, 0.15);">
+                            <strong>💡 Key Insight:</strong><br>
+                            All objects with same ID within a transaction are the SAME instance in memory!
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <pre style="margin: 0;"><code class="java" style="font-size: 0.45em;">@Transactional
+public void demo() {
+    // First fetch - DB hit
+    Customer c1 = repo.findById(1L).get();
+    
+    // Second fetch - Cache hit! 🎯
+    Customer c2 = repo.findById(1L).get();
+    
+    // Third fetch - Cache hit! 🎯
+    Customer c3 = repo.findById(1L).get();
+    
+    // Same object reference!
+    System.out.println(c1 == c2); // true
+    System.out.println(c2 == c3); // true
+}</code></pre>
+                        <div class="box warning" style="padding: 8px; font-size: 0.65em; margin-top: 8px;">
+                            <strong>⚠️ Important:</strong> Cache cleared when transaction ends!
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 15px; font-size: 0.7em;">
+                    <div class="box" style="padding: 10px; background: rgba(171, 71, 188, 0.15);">
+                        <strong>🔄 Dirty Checking Example:</strong>
+                        <pre style="margin: 5px 0;"><code class="java" style="font-size: 0.85em;">@Transactional
+public void update() {
+    Customer c = repo.findById(1L).get();
+    c.setName("Updated Name");  // Just modify - no save() needed!
+    // Hibernate detects changes and executes UPDATE automatically on commit!
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 22: L1 vs L2 Comparison -->
+            <section>
+                <h2>🔍 First-Level vs Second-Level Cache</h2>
+                <h4 style="font-size: 0.8em; margin-bottom: 20px;">Understanding the Differences</h4>
+                
+                <table style="font-size: 0.65em; width: 90%; margin: 20px auto;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, rgba(100, 181, 246, 0.3) 0%, rgba(171, 71, 188, 0.3) 100%);">
+                            <th style="width: 30%;">Feature</th>
+                            <th style="width: 35%; color: #66BB6A;">First-Level Cache (L1)</th>
+                            <th style="width: 35%; color: #AB47BC;">Second-Level Cache (L2)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Scope</strong></td>
+                            <td>Session/Transaction</td>
+                            <td>Application-wide</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sharing</strong></td>
+                            <td>Not shared between sessions</td>
+                            <td>Shared across all sessions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lifecycle</strong></td>
+                            <td>Dies with transaction</td>
+                            <td>Survives transactions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Configuration</strong></td>
+                            <td>Enabled by default</td>
+                            <td>Must enable explicitly</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Can Disable?</strong></td>
+                            <td style="color: #EF5350;">No</td>
+                            <td style="color: #66BB6A;">Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Storage</strong></td>
+                            <td>In-memory (JVM)</td>
+                            <td>External provider (EhCache, Redis)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Within single transaction</td>
+                            <td>Across application</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="two-columns" style="margin-top: 15px; font-size: 0.7em;">
+                    <div class="box success" style="padding: 10px;">
+                        <strong>L1 Best For:</strong>
+                        <ul style="margin: 5px 0; text-align: left;">
+                            <li>Same entity multiple times in one transaction</li>
+                            <li>Dirty checking within transaction</li>
+                        </ul>
+                    </div>
+                    <div class="box" style="padding: 10px; background: rgba(171, 71, 188, 0.15);">
+                        <strong>L2 Best For:</strong>
+                        <ul style="margin: 5px 0; text-align: left;">
+                            <li>Read-heavy reference data</li>
+                            <li>Entities accessed across requests</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 23: Second-Level Cache -->
+            <section>
+                <h2>🚀 Second-Level Cache (L2)</h2>
+                <h4 style="font-size: 0.85em; color: #AB47BC;">Application-Wide Shared Cache</h4>
+                
+                <div class="two-columns" style="margin-top: 10px;">
+                    <div>
+                        <div class="box" style="padding: 12px; font-size: 0.7em; background: rgba(171, 71, 188, 0.15);">
+                            <strong>💎 Characteristics:</strong>
+                            <ul style="margin: 8px 0; text-align: left;">
+                                <li>Shared across ALL sessions</li>
+                                <li>Application-scoped</li>
+                                <li>Survives transactions</li>
+                                <li>Optional (must enable)</li>
+                                <li>Requires external provider</li>
+                                <li>Configurable strategies</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="box success" style="padding: 10px; font-size: 0.65em; margin-top: 10px;">
+                            <strong>📊 Cache Strategies:</strong>
+                            <ul style="margin: 5px 0; text-align: left;">
+                                <li><code>READ_ONLY</code> - Immutable data</li>
+                                <li><code>READ_WRITE</code> - Most common</li>
+                                <li><code>NONSTRICT_READ_WRITE</code> - Faster</li>
+                                <li><code>TRANSACTIONAL</code> - JTA only</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="box" style="padding: 10px; font-size: 0.65em; background: rgba(38, 166, 154, 0.15);">
+                            <strong>⚙️ Setup (3 Steps):</strong>
+                        </div>
+                        <pre style="margin: 8px 0;"><code class="xml" style="font-size: 0.4em;"><!-- 1. Add Dependencies -->
+&lt;dependency&gt;
+    &lt;groupId&gt;org.hibernate.orm&lt;/groupId&gt;
+    &lt;artifactId&gt;hibernate-jcache&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.ehcache&lt;/groupId&gt;
+    &lt;artifactId&gt;ehcache&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+                        <pre style="margin: 8px 0;"><code class="properties" style="font-size: 0.4em;"># 2. Enable in application.properties
+spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+spring.jpa.properties.hibernate.cache.region.factory_class=
+    org.hibernate.cache.jcache.JCacheRegionFactory</code></pre>
+                        <pre style="margin: 8px 0;"><code class="java" style="font-size: 0.45em;">// 3. Annotate Entity
+@Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Customer { ... }</code></pre>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 12px;">
+                    <div class="box success" style="padding: 10px; font-size: 0.75em;">
+                        <strong>🎯 Performance Impact:</strong>
+                        <div style="display: flex; justify-content: space-around; margin-top: 8px;">
+                            <div>Transaction 1: <span style="color: #EF5350;">DB Hit</span> → Cache Store</div>
+                            <div>Transaction 2+: <span style="color: #66BB6A;">Cache Hit</span> → NO DB! 🚀</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Divider: Common Pitfalls -->
+            <section class="section-divider">
+                <h1>⚠️ Common Pitfalls</h1>
+                <h3>Performance Killers & How to Fix Them</h3>
+            </section>
+
+            <!-- SLIDE 24: N+1 Problem -->
+            <section>
+                <h2>Common Pitfall #1: N+1 Problem</h2>
+                <h4 class="error" style="font-size: 0.9em;">The Silent Performance Killer</h4>
+                <pre><code class="java" style="font-size: 0.5em;">// Query 1: Fetch all customers
+List&lt;CustomerWithLoans&gt; customers = repo.findAll();
+
+// Query 2-N: Fetch loans for EACH customer 💥
+for (CustomerWithLoans customer : customers) {
+    customer.getLoanApplications().size(); // N queries!
+}</code></pre>
+                <div class="two-columns" style="margin-top: 15px;">
+                    <div class="box error small">
+                        <strong>SQL Generated:</strong>
+                        <pre style="margin: 5px 0; font-size: 0.7em;"><code>SELECT * FROM customer;
+SELECT * FROM loan WHERE customer_id = 1;
+SELECT * FROM loan WHERE customer_id = 2;
+-- ... N more queries!</code></pre>
+                    </div>
+                    <div class="box error small">
+                        <strong>Impact:</strong>
+                        <ul style="font-size: 0.9em; margin: 5px 0;">
+                            <li>10 customers = 11 queries</li>
+                            <li>1000 customers = 1001 queries 📉</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 25: N+1 Solutions -->
+            <section>
+                <h2>N+1 Problem - Solutions</h2>
+                <div class="box success" style="padding: 10px;">
+                    <strong>Solution 1: JOIN FETCH (Recommended) ⭐</strong>
+                    <pre style="margin: 8px 0;"><code class="java" style="font-size: 0.45em;">@Query("SELECT DISTINCT c FROM CustomerWithLoans c " +
+       "LEFT JOIN FETCH c.loanApplications")
+List&lt;CustomerWithLoans&gt; findAllWithLoans();</code></pre>
+                    <p class="small" style="margin: 5px 0;">✅ Result: 1 query total (not 1+N)</p>
+                </div>
+                <div class="two-columns small" style="margin-top: 10px; font-size: 0.7em;">
+                    <div class="box" style="padding: 10px;">
+                        <strong>Solution 2: @EntityGraph</strong>
+                        <pre style="margin: 5px 0;"><code class="java" style="font-size: 0.8em;">@EntityGraph(
+  attributePaths = {"loans"})
+List&lt;Customer&gt; findAll();</code></pre>
+                    </div>
+                    <div class="box" style="padding: 10px;">
+                        <strong>Solution 3: @BatchSize</strong>
+                        <pre style="margin: 5px 0;"><code class="java" style="font-size: 0.8em;">@OneToMany
+@BatchSize(size = 10)
+List&lt;Loan&gt; loans;</code></pre>
+                    </div>
+                </div>
+                <div class="box success center" style="margin-top: 15px; font-size: 0.9em; padding: 10px;">
+                    <strong>Performance: 1001 queries → 1 query 🚀</strong>
+                </div>
+            </section>
+
+            <!-- SLIDE 26: Inefficient SQL -->
+            <section>
+                <h2>Common Pitfall #2: Inefficient SQL</h2>
+                <h4 style="font-size: 0.8em;">When Hibernate Generates Suboptimal Queries</h4>
+                <div class="box error" style="padding: 12px;">
+                    <strong>❌ Inefficient JPQL (Correlated Subqueries)</strong>
+                    <pre style="margin: 8px 0;"><code class="sql" style="font-size: 0.48em;">SELECT c.id, c.name,
+    (SELECT COUNT(*) FROM loan WHERE customer_id = c.id),
+    (SELECT SUM(amount) FROM loan WHERE customer_id = c.id)
+FROM customer c</code></pre>
+                    <p class="small" style="margin: 5px 0;">Each subquery runs for EVERY customer! O(N) complexity 💥</p>
+                </div>
+                <div class="box warning" style="margin-top: 15px; font-size: 0.8em; padding: 10px;">
+                    <strong>Problem:</strong> 100 customers = 200 subquery executions!
+                </div>
+            </section>
+
+            <!-- SLIDE 27: Efficient SQL Solution -->
+            <section>
+                <h2>Inefficient SQL - Solution</h2>
+                <div class="box success" style="padding: 12px;">
+                    <strong>✅ Efficient Native SQL (JOIN + GROUP BY)</strong>
+                    <pre style="margin: 8px 0;"><code class="sql" style="font-size: 0.45em;">SELECT c.id, c.name,
+    COUNT(la.id) as loan_count,
+    COALESCE(SUM(la.requested_amount), 0) as total
+FROM customer c
+LEFT JOIN loan_application la ON c.id = la.customer_id
+GROUP BY c.id, c.name</code></pre>
+                    <p class="small" style="margin: 5px 0;">Single query • Database-optimized • O(1) complexity 🚀</p>
+                </div>
+                <div class="two-columns small" style="margin-top: 15px; font-size: 0.7em;">
+                    <div class="box success" style="padding: 10px;">
+                        <strong>✅ Benefits:</strong>
+                        <ul style="margin: 5px 0;">
+                            <li>1 query vs N queries</li>
+                            <li>DB-optimized JOINs</li>
+                        </ul>
+                    </div>
+                    <div class="box" style="padding: 10px;">
+                        <strong>Use Native SQL for:</strong>
+                        <ul style="margin: 5px 0;">
+                            <li>Complex aggregations</li>
+                            <li>Window functions</li>
+                            <li>Performance-critical</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 28: Best Practices -->
+            <section>
+                <h2>Best Practices & Summary</h2>
+                <div class="center" style="font-size: 1.5em; margin-bottom: 30px;">
+                    <strong>JDBC → JPA → Spring Data JPA → Optimize</strong>
+                </div>
+                <div class="two-columns small">
+                    <div>
+                        <div class="box success">
+                            <strong>✅ DO:</strong>
+                            <ul>
+                                <li>Use Spring Data JPA</li>
+                                <li>Always @Transactional</li>
+                                <li>FetchType.LAZY by default</li>
+                                <li>Watch for N+1</li>
+                                <li>Enable SQL logging</li>
+                                <li>Use native SQL when needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="box error">
+                            <strong>❌ DON'T:</strong>
+                            <ul>
+                                <li>Missing @Transactional</li>
+                                <li>FetchType.EAGER everywhere</li>
+                                <li>Ignoring N+1 problem</li>
+                                <li>Complex JPQL without testing</li>
+                                <li>No query optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 29: Project Structure -->
+            <section>
+                <h2>Your Project Structure</h2>
+                <h4 style="font-size: 0.8em; margin-bottom: 20px;">Complete Code Examples Available</h4>
+                <div class="two-columns small" style="font-size: 0.7em;">
+                    <div class="box">
+                        <strong>📁 JDBC Examples</strong>
+                        <ul style="margin: 10px 0;">
+                            <li>JDBCExample.java</li>
+                            <li>JDBCPreparedStatement.java</li>
+                            <li>JPAExample.java</li>
+                            <li>SpringDataJPAExample.java</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <strong>⚡ Caching Examples</strong>
+                        <ul style="margin: 10px 0;">
+                            <li>FirstLevelCacheExample</li>
+                            <li>SecondLevelCacheExample</li>
+                            <li>DifferentTransactions...</li>
+                            <li>SaveAndCacheExample</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="two-columns small" style="font-size: 0.7em; margin-top: 10px;">
+                    <div class="box">
+                        <strong>🔗 Relationship Mappings</strong>
+                        <ul style="margin: 10px 0;">
+                            <li>OneToMany</li>
+                            <li>ManyToOne</li>
+                            <li>ManyToMany</li>
+                        </ul>
+                    </div>
+                    <div class="box warning">
+                        <strong>⚠️ Common Pitfalls</strong>
+                        <ul style="margin: 10px 0;">
+                            <li>NPlusOneProblemDemo</li>
+                            <li>InefficientSQLExample</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box success center" style="margin-top: 20px; font-size: 0.85em;">
+                    <strong>🚀 All examples are runnable!</strong><br>
+                    <code>mvn spring-boot:run</code>
+                </div>
+            </section>
+
+            <!-- SLIDE 30: Thank You -->
+            <section class="title-slide">
+                <h1>Thank You! 🙏</h1>
+                <h2>Questions?</h2>
+                <div style="margin-top: 50px; font-size: 0.9em;">
+                    <p><strong>Sagar Kanojia</strong></p>
+                    <p>📧 [your-email]</p>
+                    <p>💼 [your-linkedin]</p>
+                    <p>🐙 [your-github]</p>
+                </div>
+                <div style="margin-top: 50px; font-size: 0.7em;">
+                    <p><strong>Resources:</strong></p>
+                    <p>hibernate.org | spring.io/projects/spring-data-jpa</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/zoom/zoom.js"></script>
+
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            center: true,
+            slideNumber: 'c/t',
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+            backgroundTransition: 'fade',
+            
+            // Progress bar
+            progress: true,
+            
+            // Controls
+            controls: true,
+            controlsTutorial: true,
+            
+            // Keyboard navigation
+            keyboard: true,
+            
+            // Touch navigation
+            touch: true,
+            
+            // Loop the presentation
+            loop: false,
+            
+            // Auto-slide
+            autoSlide: 0,
+            
+            // Plugins
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom ]
+        });
+    </script>
+</body>
+</html>
